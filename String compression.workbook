@@ -1,0 +1,17 @@
+---
+uti: com.xamarin.workbook
+platforms:
+- Console
+---
+
+### String compression
+
+###### Given a string, write a function to compress it by shortening every sequence of the same character to that character followed by the number of repetitions.
+
+```csharp
+string input = "zzzzaaabbbccc1 ";
+var answer = input.ToCharArray()
+                  .GroupBy(x => x) // group by character
+                  .Select(g => string.Join("", g.Key, g.Count())) // join a character and its frequency into a string; using "+" will not promote char/int to string: a3 -> 973
+                  .Aggregate((current, next) => string.Join("", current, next)); //join all groups into a string
+```

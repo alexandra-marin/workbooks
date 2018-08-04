@@ -1,0 +1,24 @@
+---
+uti: com.xamarin.workbook
+platforms:
+- Console
+---
+
+```csharp
+public class Mi
+{
+    public int a;
+}
+var lala = new Mi() { a=10 };
+
+try 
+{ 
+    return lala.a; 
+    
+} 
+finally 
+{ 
+    lala.a++; 
+}
+```
+

@@ -1,0 +1,58 @@
+---
+uti: com.xamarin.workbook
+platforms:
+- Console
+---
+
+Solution #1
+
+```csharp
+Func<int, bool> IsFizz = number => number % 3 == 0;
+Func<int, bool> IsBuzz = number => number % 5 == 0;
+Func<int, bool> IsFizzBuzz = number => number % 3 == 0 && number % 5 == 0;
+```
+
+```csharp
+Func<int, string> Display = number => 
+    IsFizzBuzz(number) ? 
+        "FizzBuzz" : 
+        (IsFizz(number) ? 
+            "Fizz" : 
+            (IsBuzz(number) ? 
+                "Buzz" : 
+                number.ToString()));
+```
+
+```csharp
+var numbers = Enumerable.Range(1, 15);
+numbers.Select(Display);
+```
+
+Solution #2
+
+```csharp
+var combinations = new List<Tuple<int, string>>
+{ 
+    new Tuple<int, string> (3, "Fizz"), 
+    new Tuple<int, string> (5, "Buzz"), 
+};
+```
+
+```csharp
+ Func<int, int, bool> isMatch = (number, fizz) => number % fizz == 0;
+```
+
+```csharp
+ for (int i = 1; i <= 16; i++)
+{
+    var matchingCombs = combinations.Where(c => isMatch(i, c.Item1));
+    if (matchingCombs.Any())
+    {
+        Console.WriteLine(string.Join("", matchingCombs.Select(c => c.Item2)));
+    }
+    else
+    {
+        Console.WriteLine(i);
+    }
+}
+```

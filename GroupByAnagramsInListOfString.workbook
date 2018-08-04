@@ -1,0 +1,68 @@
+---
+uti: com.xamarin.workbook
+id: cd520fa3-f0e8-4811-8505-8f76e74645cf
+title: GroupByAnagramsInListOfString
+platforms:
+- Console
+---
+
+```csharp
+var input = new List<string>() {"star", "rats", "mine", "yay"};
+var dict = new Dictionary<string, List<string>>();
+
+foreach(var word in input)
+{
+    var sorted = String.Concat(word.ToCharArray().OrderBy(x => x));
+
+    if(dict.ContainsKey(sorted))
+    {
+        var anagrams = dict[sorted];
+        anagrams.Add(word);
+    }
+    else
+    {
+        dict[sorted] = new List<string>() { word };
+    }
+
+    return dict;
+}
+```
+
+```csharp
+public bool IsAnagram(string input1, string input2)
+{
+    var dict = new Dictionary<char, int>();
+
+    foreach(var c in input1)
+    {
+        if(dict.ContainsKey(c))
+        {
+            var times = dict[c];
+            times++;
+            dict[c] = times;
+        }
+        else
+        {
+            dict[c] = 1;
+        }
+    }
+
+    foreach(var c in input2)
+    {
+        if(dict.ContainsKey(c))
+        {
+            var times = dict[c];
+            times--;
+            dict[c] = times;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    return dict.All(x => x.Value == 0);
+}
+
+IsAnagram("star", "rats");
+```

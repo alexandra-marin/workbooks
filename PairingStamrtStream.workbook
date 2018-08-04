@@ -1,0 +1,209 @@
+---
+uti: com.xamarin.workbook
+id: 2e87ec0a-31e2-4a6d-80a0-e5bc3f4c1ea2
+title: PairingStamrtStream
+platforms:
+- Console
+---
+
+```csharp
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+public class Program {
+
+    static Random generator = new System.Random();
+ 
+    public static void Main(){
+        NumbersWithRange();
+        AllNumberWithinRange();
+        FairRoll();
+    }
+
+    public static void FairRoll()
+    {
+        var tolerance = 100;
+        var ideal = 1000;
+
+        var seenNumbers = Enumerable.Range(1, 6000)
+                                    .Select(x => RollDice())
+                                    .ToLookup(x => x, y => y);
+
+        /*
+            seenNumbers :
+                            { 1, new int[] { 1, 1, 1, ..., 1 }},
+                            ...
+                            { 6, new int[] { 6, 6, 6, ..., 6 }},
+
+            seenNumbers2 :
+                            { 1, 999 },
+                            ...
+                            { 6, 1010 },
+        */
+        var seenNumbers2 = Enumerable.Range(1, 6000)
+                                    .Select(x => RollDice())
+                                    .Aggregate(new Dictionary<int,int>(), (dic,x) => {
+                                        if(dic.ContainsKey(x)){
+                                            dic[x] = dic[x] + 1;
+                                        } else {
+                                            dic.Add(x, 1);
+                                        }
+                                        return dic;
+                                    });
+
+        /*
+        foreach(var val in seenNumbers){
+            if(!(val.Count() > ideal - tolerance && val.Count() < ideal + tolerance)){
+               Console.WriteLine(val.Key + " is not within tolerance" + val.Count());
+            }
+        }
+        */
+
+        foreach(var val in seenNumbers2){
+            if(!(val.Value > ideal - tolerance && val.Value < ideal + tolerance)){
+               Console.WriteLine(val.Key + " is not within tolerance" + val.Value);
+            }
+        }
+
+    }
+
+    public static void AllNumberWithinRange()
+    {
+        List<int> seenNumbers = new List<int>();
+        for(int i = 0; i < 1000; i++)
+        {
+            var next = RollDice();
+            if(!seenNumbers.Contains(next))
+            {
+                seenNumbers.Add(next);
+            }
+        }
+
+        if(seenNumbers.Count == 6)
+        {
+            Console.WriteLine("All numbers present");
+        }
+        else
+        {
+            Console.WriteLine("All numbers are not present: " + String.Join(",", seenNumbers));
+        }
+    }
+
+    public static void NumbersWithRange()
+    {
+        for(int i = 0; i < 1000; i++)
+        {
+            var next = RollDice();
+            if(next < 1 || next > 6)
+            {
+                Console.WriteLine("Rolling dice failed: " + next);
+            }
+        }
+    }
+
+    public static int RollDice()
+    {
+        return generator.Next(1, 7);
+    }
+}using System;
+using System.Linq;
+using System.Collections.Generic;
+
+public class Program {
+
+    static Random generator = new System.Random();
+ 
+    public static void Main(){
+        NumbersWithRange();
+        AllNumberWithinRange();
+        FairRoll();
+    }
+
+    public static void FairRoll()
+    {
+        var tolerance = 100;
+        var ideal = 1000;
+
+        var seenNumbers = Enumerable.Range(1, 6000)
+                                    .Select(x => RollDice())
+                                    .ToLookup(x => x, y => y);
+
+        /*
+            seenNumbers :
+                            { 1, new int[] { 1, 1, 1, ..., 1 }},
+                            ...
+                            { 6, new int[] { 6, 6, 6, ..., 6 }},
+
+            seenNumbers2 :
+                            { 1, 999 },
+                            ...
+                            { 6, 1010 },
+        */
+        var seenNumbers2 = Enumerable.Range(1, 6000)
+                                    .Select(x => RollDice())
+                                    .Aggregate(new Dictionary<int,int>(), (dic,x) => {
+                                        if(dic.ContainsKey(x)){
+                                            dic[x] = dic[x] + 1;
+                                        } else {
+                                            dic.Add(x, 1);
+                                        }
+                                        return dic;
+                                    });
+
+        /*
+        foreach(var val in seenNumbers){
+            if(!(val.Count() > ideal - tolerance && val.Count() < ideal + tolerance)){
+               Console.WriteLine(val.Key + " is not within tolerance" + val.Count());
+            }
+        }
+        */
+
+        foreach(var val in seenNumbers2){
+            if(!(val.Value > ideal - tolerance && val.Value < ideal + tolerance)){
+               Console.WriteLine(val.Key + " is not within tolerance" + val.Value);
+            }
+        }
+
+    }
+
+    public static void AllNumberWithinRange()
+    {
+        List<int> seenNumbers = new List<int>();
+        for(int i = 0; i < 1000; i++)
+        {
+            var next = RollDice();
+            if(!seenNumbers.Contains(next))
+            {
+                seenNumbers.Add(next);
+            }
+        }
+
+        if(seenNumbers.Count == 6)
+        {
+            Console.WriteLine("All numbers present");
+        }
+        else
+        {
+            Console.WriteLine("All numbers are not present: " + String.Join(",", seenNumbers));
+        }
+    }
+
+    public static void NumbersWithRange()
+    {
+        for(int i = 0; i < 1000; i++)
+        {
+            var next = RollDice();
+            if(next < 1 || next > 6)
+            {
+                Console.WriteLine("Rolling dice failed: " + next);
+            }
+        }
+    }
+
+    public static int RollDice()
+    {
+        return generator.Next(1, 7);
+    }
+}
+```
